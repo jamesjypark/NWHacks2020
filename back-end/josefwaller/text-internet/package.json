@@ -1,0 +1,9 @@
+{
+  "name": "text-internet",
+  "description": "",
+  "author": "josefwaller <josef@josefwaller.com>",
+  "main": "functions/__main__.js",
+  "dependencies": {
+    "lib": "^4.0.5"
+  }
+}
