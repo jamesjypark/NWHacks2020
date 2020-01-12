@@ -1,11 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow
- */
-
 import React from 'react';
 import {
   StyleSheet,
@@ -18,14 +10,15 @@ import {
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import Communications from 'react-native-communications';
+import SmsListener from 'react-native-android-sms-listener';
 
 class App extends React.Component {
-  // sendText = () => {
-  //   Alert.alert('hello');
-  //   Communications.text('7783508649', 'hello');
-  // };
-
+  componentDidMount() {
+    console.log(SmsListener);
+    SmsListener.addListener(message => {
+      Alert.alert(message.body);
+    });
+  }
   sendText = () => {
     console.log(NativeModules);
     console.log(NativeModules.SendSMS);
