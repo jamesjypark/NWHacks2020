@@ -9,7 +9,7 @@ const matchAll = require("match-all");
  * @param {string} Body The body of the message
  * @returns {object.http} xml The XML
  */
-module.exports = async (Body= '{ "type" : "search" , "query" : "whats the weather" }' , context) => {
+module.exports = async (Body= '{ "type" : "search" , "query" : "Beaver" }' , context) => {
   
 
   // Get the response to the request
@@ -20,9 +20,8 @@ module.exports = async (Body= '{ "type" : "search" , "query" : "whats the weathe
   let xml = "";
   const SIZE = 600;
   for (let i = 0; i < contents.length / SIZE; i++) {
-    xml += `<Message><Body>${contents.slice(SIZE * i, (i + 1) * SIZE)}</Body></Message>`;
+    xml += `<Message><Body>${he.encode(contents.slice(SIZE * i, (i + 1) * SIZE))}</Body></Message>`;
   }
-  console.log(xml);
   return {
     body: `<?xml version="1.0" encoding="UTF-8"?><Response>${xml}</Response>`,
     headers: {
@@ -76,11 +75,11 @@ function getSearchResponse(text) {
       }
     }).filter(e => e != null);
     // Get the card, if there is one
-    let x = soup.find("li", "b_ans");
+    let x = soup.find("div", "b_entityTP");
     const DESC_SIZE = 100;
     if (x) {
       // Ensure the card has the right things in it
-      let descHtml = x.find("span");
+      let descHtml = x.find("div", "b_snippet")
       let urlHtml = x.find("a");
       let titleHtml = x.find("div", "b_clearfix") || x.find("h2"); 
       if (descHtml && urlHtml && titleHtml) {
