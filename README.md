@@ -29,6 +29,6 @@ After cloning the repository, complete the following steps to run the frontend o
 After cloning the repository, complete the following steps to run the backend on a webserver: 
 
 1. Navigate to the `/frontend` folder.
-2. Run `lib up dev` to start the server.
+2. Run `lib .` to locally run the server.
 
 Requests can be sent to `[BASE_URL]/text-internet@dev`
