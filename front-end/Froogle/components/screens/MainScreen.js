@@ -10,7 +10,8 @@ import { GLOBAL_STYLES } from '../../constants/globalStyles';
 class MainScreen extends React.Component {
 
   static propTypes = {
-    onChangeQuery: PropTypes.func.isRequired
+    onChangeQuery: PropTypes.func.isRequired,
+    submitQuery: PropTypes.func.isRequired
   }
 
   state = {
@@ -18,12 +19,16 @@ class MainScreen extends React.Component {
   };
 
   render() {
-    const { onChangeQuery } = this.props;
+    const { onChangeQuery, submitQuery } = this.props;
     return (
       <StyleView>
         <Image style={styles.logo} source={froogleTextLogo} />
-        <Text style={GLOBAL_STYLES.title}>What can we help you with?</Text>
-        <SearchBar onChangeQuery={onChangeQuery} />
+        <Text style={[GLOBAL_STYLES.title, styles.mainScreenTitle]}>What can we help you with?</Text>
+        <SearchBar 
+          isLarge 
+          onChangeQuery={onChangeQuery} 
+          submitQuery={submitQuery}  
+        />
       </StyleView>
     );
   }
@@ -31,10 +36,15 @@ class MainScreen extends React.Component {
 
 const styles = StyleSheet.create({
   "logo": {
-    flex: 1,
-    width: 50,
-    height: 50,
+    width: "auto",
+    marginHorizontal: 80,
+    marginTop: -20,
+    marginBottom: 120,
     resizeMode: 'contain'
+  },
+  mainScreenTitle: {
+    fontSize: 36,
+    marginHorizontal: 15
   }
 });
 

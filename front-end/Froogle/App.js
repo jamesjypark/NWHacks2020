@@ -13,7 +13,6 @@ import {
 import SearchScreen from './components/screens/SearchScreen';
 import LinkScreen from './components/screens/LinkScreen';
 import SmsListener from 'react-native-android-sms-listener';
-
 import MainScreen from './components/screens/MainScreen';
 
 class App extends React.Component {
@@ -31,9 +30,7 @@ class App extends React.Component {
     });
   }
 
-  sendText = () => {
-    NativeModules.SendSMS.sendText('7786771604', this.state.currQuery);
-  };
+  sendText = () => NativeModules.SendSMS.sendText('7786777623', this.state.currQuery);
 
   onChangeQuery = query => {
     this.setState({ currQuery: query });
@@ -41,25 +38,25 @@ class App extends React.Component {
 
   render() {
     // const { result, linkSelected } = this.state;
-    const linkSelected = true;
-    const results = [
-      {
-        type: 'card',
-        title: 'A very cool title',
-        desc: 'Cool titles are titles that are very cool',
-        url: 'link 1',
-      },
-      {
-        title: 'A not cool title',
-        desc: 'Cool titles are titles that are very cool',
-        url: 'link 2',
-      },
-      {
-        title: 'A somewhat cool title',
-        desc: 'Cool titles are titles that are very cool',
-        url: 'link 3',
-      },
-    ];
+    const linkSelected = false;
+    const results = undefined; //[
+    //   {
+    //     type: 'card',
+    //     title: 'A very cool title',
+    //     desc: 'Cool titles are titles that are very cool',
+    //     url: 'link 1',
+    //   },
+    //   {
+    //     title: 'A not cool title',
+    //     desc: 'Cool titles are titles that are very cool',
+    //     url: 'link 2',
+    //   },
+    //   {
+    //     title: 'A somewhat cool title',
+    //     desc: 'Cool titles are titles that are very cool',
+    //     url: 'link 3',
+    //   },
+    // ];
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         {results ? (
@@ -69,7 +66,7 @@ class App extends React.Component {
             <SearchScreen results={results} />
           )
         ) : (
-          <Text>MainScreen</Text>
+          <MainScreen onChangeQuery={this.onChangeQuery} submitQuery={this.sendText} />
         )}
       </ScrollView>
     );
