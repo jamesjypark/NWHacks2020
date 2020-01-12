@@ -16,7 +16,7 @@ class Link extends React.Component {
     desc: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
   }
-  
+
   render() {
     const { title, desc, url } = this.props;
 
@@ -25,9 +25,11 @@ class Link extends React.Component {
         onPress={() => this.props.onPress(url)}
         style={styles.card}
       >
-        <View style={styles.cardText}>
-          <Text style={GLOBAL_STYLES.bodyText2Bold}>{he.decode(title)}</Text>
-          <Text style={GLOBAL_STYLES.bodyText2}>{he.decode(desc)}</Text>
+        <View style={styles.card}>
+          <View style={styles.cardText}>
+            <Text style={GLOBAL_STYLES.bodyText2Bold}>{he.decode(title)}</Text>
+            <Text style={GLOBAL_STYLES.bodyText2}>{he.decode(desc)}</Text>
+          </View>
         </View>
       </TouchableNativeFeedback>
     );
@@ -40,7 +42,7 @@ const styles = StyleSheet.create({
     height: 'auto',
     marginTop: 10,
     borderRadius: 10,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: GREY_COLOR,
   },
   cardText: {

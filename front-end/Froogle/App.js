@@ -10,6 +10,8 @@ import { END_OF_MESSAGE, API_PHONE_NUMBER, QUERY_TYPES } from './constants/const
 
 let isReceivingSMS = false;
 let currentBuildingSMS = '';
+let lastMessage = '';
+let subscription = null;
 
 /**
  * Class that renders the main application, and
@@ -35,16 +37,19 @@ class App extends React.Component {
       console.log('message', message);
       if (isReceivingSMS) {
         currentBuildingSMS += message.body;
-        if (message.body.includes(END_OF_MESSAGE)) {
-          console.log('sms', currentBuildingSMS);
-          this.setState({
-            results: parseSMS(currentBuildingSMS).reverse(),
-          }, () => currentBuildingSMS = '');
-          isReceivingSMS = false;
-        }
       } else {
         isReceivingSMS = true;
         currentBuildingSMS = message.body;
+      }
+      if (message.body.includes(END_OF_MESSAGE)) {
+        console.log('sms', currentBuildingSMS);
+        this.setState(
+          {
+            results: parseSMS(currentBuildingSMS).reverse(),
+          },
+          () => (currentBuildingSMS = ''),
+        );
+        isReceivingSMS = false;
       }
     });
   }
@@ -103,6 +108,10 @@ class App extends React.Component {
     linkSelected: false,
     currQuery: ''
   });
+
+  componentWillUnmount() {
+    subscription.remove();
+  }
 
   render() {
     const { results, linkSelected, currQuery } = this.state;

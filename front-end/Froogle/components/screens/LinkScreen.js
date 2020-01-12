@@ -6,7 +6,6 @@ import he from 'he';
 import SearchBar from '../common/SearchBar';
 import StyleView from '../common/StyleView';
 import { GLOBAL_STYLES } from '../../constants/globalStyles';
-import { GREY_COLOR } from '../../constants/hexcodes';
 
 /**
  * Class that renders the Link screen with a
@@ -51,8 +50,6 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     borderRadius: 10,
-    borderWidth: 2,
-    borderColor: GREY_COLOR,
   },
   cardText: {
     height: 'auto',

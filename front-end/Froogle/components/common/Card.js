@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, TouchableNativeFeedback } from 'react-native';
 import PropTypes from 'prop-types';
 import he from 'he';
 
@@ -18,14 +18,14 @@ class Card extends React.Component {
     const { desc, url } = this.props;
 
     return (
-      <TouchableOpacity
+      <TouchableNativeFeedback
         onPress={() => this.props.onPress(url)}
         style={styles.card}
       >
         <Text style={[styles.cardText, GLOBAL_STYLES.bodyText1]}>
           {he.decode(desc)}
         </Text>
-      </TouchableOpacity>
+      </TouchableNativeFeedback>
     );
   }
 }
