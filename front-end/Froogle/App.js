@@ -7,16 +7,33 @@
  */
 
 import React from 'react';
-import {StyleSheet, ScrollView, View, Text, Alert} from 'react-native';
+import {
+  StyleSheet,
+  ScrollView,
+  View,
+  Text,
+  Alert,
+  NativeModules,
+} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import Communications from 'react-native-communications';
 
 class App extends React.Component {
+  // sendText = () => {
+  //   Alert.alert('hello');
+  //   Communications.text('7783508649', 'hello');
+  // };
+
   sendText = () => {
-    Alert.alert('hello');
-    Communications.text('7783508649', 'hello');
+    console.log(NativeModules);
+    console.log(NativeModules.SendSMS);
+    let result = NativeModules.SendSMS.sendText(
+      '7786771604',
+      'hey nilay if this message ever reaches you, remember that you are a genius',
+    );
+    console.log('result is ' + result);
   };
   render() {
     return (

@@ -25,8 +25,12 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-        <intent-filter android:label="filter_react_native">
-          <action android:name="android.intent.action.VIEW" />
+        <intent-filter android:label="froogle">
+          <!-- <action android:name="android.intent.action.VIEW" /> -->
+          <action android:name="android.intent.action.SEND" />                
+          <action android:name="android.intent.action.SENDTO" />
+          <category android:name="android.intent.category.DEFAULT" />
+          <category android:name="android.intent.category.BROWSABLE" />
           <category android:name="android.intent.category.DEFAULT" />
           <category android:name="android.intent.category.BROWSABLE" />
           <data android:scheme="sms" />
