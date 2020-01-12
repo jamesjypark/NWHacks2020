@@ -15,9 +15,10 @@ module.exports = async (Body= '{ "type" : "search" , "query" : "What is a house?
  //let res = await getWebpage("https://en.wikipedia.org/wiki/Open_specifications");
   // For now, just return the response as XML
   const result = await checkResponse(JSON.parse(Body));
+  let contents = JSON.stringify(result).replace("&nbsp;", "");
+  let xml = contents.match(/.{1,1000}./).map(e => `<Message><Body>${he.encode(e)}</Body></Message>`).join("");
   return {
-    body: `<?xml version="1.0" encoding="UTF-8"?><Response><Message><Body>${he.encode(JSON.stringify(
-	result).replace("&nbsp;", ""))}</Body></Message></Response>`,
+    body: `<?xml version="1.0" encoding="UTF-8"?><Response>${xml}</Response>`,
     headers: {
       'Content-Type': "application/xml"
     },
