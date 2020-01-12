@@ -2,6 +2,7 @@ const rp = require('request-promise');
 const JSSoup = require('jssoup').default;
 const url = require("url");
 const he = require("he");
+const matchAll = require("match-all");
 
 
 /**
@@ -15,8 +16,12 @@ module.exports = async (Body= '' , context) => {
  //let res = await getWebpage("https://en.wikipedia.org/wiki/Open_specifications");
   // For now, just return the response as XML
   const result = await checkResponse(JSON.parse(Body));
-  let contents = JSON.stringify(result).replace("&nbsp;", "");
-  let xml = contents.match(/.{1,1000}./).map(e => `<Message><Body>${he.encode(e)}</Body></Message>`).join("");
+  let contents = JSON.stringify(result).replace("&nbsp;", "") + " END";
+  let xml = "";
+  for (let i = 0; i < contents.length / 1000 + 1; i++) {
+    xml += `<Message><Body>${contents.slice(1000 * i, (i + 1) * 1000)}</Body></Message>`;
+  }
+  console.log(xml);
   return {
     body: `<?xml version="1.0" encoding="UTF-8"?><Response>${xml}</Response>`,
     headers: {
