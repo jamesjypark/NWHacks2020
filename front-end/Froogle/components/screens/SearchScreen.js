@@ -1,34 +1,44 @@
 import React from 'react';
 
-import {Text, View, Alert} from 'react-native';
+import {StyleSheet, Text, View, Alert} from 'react-native';
 
+import SearchBar from '../common/SearchBar';
+import StyleView from '../common/StyleView';
 import Card from '../common/Card';
 import Link from '../common/Link';
+
+import {GLOBAL_STYLES} from '../../constants/globalStyles';
 
 class SearchScreen extends React.Component {
   onPress = url => {
     const queryObject = {
       url: url,
-      type: 'search',
+      type: 'get',
     };
     // text query object to server
     Alert.alert('going to ' + url);
   };
   render() {
-    const {results} = this.props;
+    // const {results} = this.props;
+    const results = [];
     return (
-      <View>
-        <Text>Search bar</Text>
+      <StyleView>
+        <SearchBar />
         {results.length === 0 ? (
-          <Text>no search result</Text>
+          <View style={styles.noResultContainer}>
+            <Text style={GLOBAL_STYLES.header}>hmmm...</Text>
+            <Text style={GLOBAL_STYLES.bodyText1}>
+              sorry, we couldn't find any results for that query
+            </Text>
+          </View>
         ) : (
           results.map(element => {
             if (element.type === 'card') {
               return (
                 <View>
-                  <Text>here you go</Text>
+                  <Text style={GLOBAL_STYLES.headerLeft}>here you go</Text>
                   <Card {...element} onPress={this.onPress} />
-                  <Text>more results</Text>
+                  <Text style={GLOBAL_STYLES.subheader1}>more results</Text>
                 </View>
               );
             } else {
@@ -36,9 +46,19 @@ class SearchScreen extends React.Component {
             }
           })
         )}
-      </View>
+      </StyleView>
     );
   }
 }
 
 export default SearchScreen;
+
+const styles = StyleSheet.create({
+  noResultContainer: {
+    width: 'auto',
+    height: 'auto',
+    marginTop: 100,
+    marginBottom: 10,
+    textAlign: 'center',
+  },
+});

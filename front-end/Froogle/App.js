@@ -33,35 +33,38 @@ class App extends React.Component {
   sendText = () => NativeModules.SendSMS.sendText('7786777623', this.state.currQuery);
 
   onChangeQuery = query => {
-    this.setState({ currQuery: query });
+    this.setState({currQuery: query});
   };
 
   render() {
     // const { result, linkSelected } = this.state;
     const linkSelected = false;
-    const results = undefined; //[
-    //   {
-    //     type: 'card',
-    //     title: 'A very cool title',
-    //     desc: 'Cool titles are titles that are very cool',
-    //     url: 'link 1',
-    //   },
-    //   {
-    //     title: 'A not cool title',
-    //     desc: 'Cool titles are titles that are very cool',
-    //     url: 'link 2',
-    //   },
-    //   {
-    //     title: 'A somewhat cool title',
-    //     desc: 'Cool titles are titles that are very cool',
-    //     url: 'link 3',
-    //   },
-    // ];
+    const results = [
+      {
+        type: 'card',
+        title: 'A very cool title',
+        desc:
+          'Cool titles are titles that are very cool but is often considered cooler than normal titles',
+        url: 'link 1',
+      },
+      {
+        title: 'A not cool title',
+        desc:
+          'Cool titles are titles that are very cool and I am very tired but this is fun so it is ok',
+        url: 'link 2',
+      },
+      {
+        title: 'A somewhat cool title',
+        desc:
+          'Cool titles are titles that are very cool but is it really worth having this much fun to build?',
+        url: 'link 3',
+      },
+    ];
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         {results ? (
           linkSelected ? (
-            <LinkScreen />
+            <LinkScreen results={results} />
           ) : (
             <SearchScreen results={results} />
           )
