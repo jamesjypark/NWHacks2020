@@ -8,7 +8,7 @@ const he = require("he");
  * @param {string} Body The body of the message
  * @returns {object.http} xml The XML
  */
-module.exports = async (Body= '{ "type" : "search" , "query" : "What is a house?" }' , context) => {
+module.exports = async (Body= '' , context) => {
   
 
   // Get the response to the request
@@ -35,7 +35,7 @@ async function checkResponse(text){
      return await getSearchResponse(text.query); 
     }
 
-    if(text.type === "get") {
+  else if(text.type === "get") {
      // const responseValue = await getWebpage(text.url);  
     // return JSON.stringify(responseValue);
      return await getWebpage(text.url);
