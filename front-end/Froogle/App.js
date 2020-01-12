@@ -60,6 +60,7 @@ class App extends React.Component {
         url: 'link 3',
       },
     ];
+    
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         {results ? (
