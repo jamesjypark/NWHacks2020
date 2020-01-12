@@ -6,6 +6,8 @@ import {
   Text,
   Alert,
   NativeModules,
+  TextInput,
+  Button,
 } from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
@@ -13,31 +15,42 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import SmsListener from 'react-native-android-sms-listener';
 
 class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      query: '',
+    };
+  }
+
   componentDidMount() {
-    console.log(SmsListener);
+    console.log('component mounted');
     SmsListener.addListener(message => {
       Alert.alert(message.body);
     });
   }
+
   sendText = () => {
-    console.log(NativeModules);
-    console.log(NativeModules.SendSMS);
-    let result = NativeModules.SendSMS.sendText(
-      '7786771604',
-      'hey nilay if this message ever reaches you, remember that you are a genius',
-    );
-    console.log('result is ' + result);
+    NativeModules.SendSMS.sendText('7786771604', this.state.query);
   };
+
+  onChangeQuery = query => {
+    this.setState({query});
+  };
+
   render() {
+    const {query} = this.state;
     return (
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.scrollView}>
         <View style={styles.body}>
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle} onPress={this.sendText}>
-              Hello Nilay
-            </Text>
+            <TextInput
+              style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+              onChangeText={text => this.onChangeQuery(text)}
+              value={query}
+            />
+            <Button title="Search" onPress={this.sendText} />
           </View>
         </View>
       </ScrollView>
