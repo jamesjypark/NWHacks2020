@@ -4,6 +4,10 @@
   "author": "josefwaller <josef@josefwaller.com>",
   "main": "functions/__main__.js",
   "dependencies": {
-    "lib": "^4.0.5"
+    "lib": "^4.0.5",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "twilio": "^3.39.2",
+    "xml": "^1.0.1"
   }
 }
