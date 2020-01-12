@@ -1,6 +1,8 @@
 import React from 'react';
 
-import {Text, TouchableOpacity, Alert} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+
+import {GLOBAL_STYLES} from '../../constants/globalStyles';
 
 class Card extends React.Component {
   render() {
@@ -9,11 +11,30 @@ class Card extends React.Component {
       <TouchableOpacity
         onPress={() => {
           this.props.onPress(url);
-        }}>
-        <Text>{desc}</Text>
+        }}
+        style={styles.card}>
+        <Text style={{...styles.cardText, ...GLOBAL_STYLES.bodyText1}}>
+          {desc}
+        </Text>
       </TouchableOpacity>
     );
   }
 }
 
 export default Card;
+
+const styles = StyleSheet.create({
+  card: {
+    width: 'auto',
+    height: 'auto',
+    marginTop: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#d6d7da',
+  },
+  cardText: {
+    height: 'auto',
+    padding: 15,
+  },
+});
