@@ -4,6 +4,7 @@
   "author": "josefwaller <josef@josefwaller.com>",
   "main": "functions/__main__.js",
   "dependencies": {
+    "he": "^1.2.0",
     "jssoup": "0.0.10",
     "lib": "^4.0.5",
     "request": "^2.88.0",
