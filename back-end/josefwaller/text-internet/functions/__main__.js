@@ -9,7 +9,7 @@ const matchAll = require("match-all");
  * @param {string} Body The body of the message
  * @returns {object.http} xml The XML
  */
-module.exports = async (Body= '{ "type" : "search" , "query" : "Beaver" }' , context) => {
+module.exports = async (Body= '{ "type" : "search" , "query" : "Beavers" }' , context) => {
   
 
   // Get the response to the request
@@ -58,6 +58,7 @@ function getSearchResponse(text) {
     var soup = new JSSoup(body);
     // Get the regular responses
     var resultsHTML = soup.findAll('li', 'b_algo');
+    const DESC_SIZE = 100;
     let results = resultsHTML.slice(0, 4).map(e => {
       let titleHtml = e.find("h2");
       if (titleHtml) {
@@ -67,7 +68,7 @@ function getSearchResponse(text) {
           return {
             title: titleHtml.text,
             url: urlHtml.attrs["href"],
-            desc: descHtml.text
+            desc: descHtml.text.substring(0, DESC_SIZE - 3) + "..."
           }
         } else {
           return null
@@ -76,16 +77,16 @@ function getSearchResponse(text) {
     }).filter(e => e != null);
     // Get the card, if there is one
     let x = soup.find("div", "b_entityTP");
-    const DESC_SIZE = 100;
     if (x) {
       // Ensure the card has the right things in it
       let descHtml = x.find("div", "b_snippet")
-      let urlHtml = x.find("a");
+      let urlHtml = x.find("div", "infoCardIcons") ? x.find("div", "infoCardIcons").find("a") : null;
       let titleHtml = x.find("div", "b_clearfix") || x.find("h2"); 
+      const CARD_DESC_SIZE = 300;
       if (descHtml && urlHtml && titleHtml) {
         results = results.concat({
           type: "card",
-          desc: descHtml.text.substring(0, DESC_SIZE - 3) + "...",
+          desc: descHtml.text.substring(0, CARD_DESC_SIZE - 3) + "...",
           url: urlHtml.attrs["href"],
           title: titleHtml.text
         });
