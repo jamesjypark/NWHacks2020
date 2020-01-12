@@ -18,7 +18,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      query: '',
+      currQuery: '',
     };
   }
 
@@ -30,21 +30,20 @@ class App extends React.Component {
   }
 
   sendText = () => {
-    NativeModules.SendSMS.sendText('7786771604', this.state.query);
+    NativeModules.SendSMS.sendText('7786771604', this.state.currQuery);
   };
 
   onChangeQuery = query => {
-    this.setState({query});
+    this.setState({currQuery: query});
   };
 
   render() {
-    const {query} = this.state;
+    const {results} = this.state;
     return (
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={styles.scrollView}>
-        <View style={styles.body}>
-          <View style={styles.sectionContainer}>
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        {results ? <Text>SearchScreen</Text> : <Text>MainScreen</Text>}
+        {/* <View>
+          <View>
             <TextInput
               style={{height: 40, borderColor: 'gray', borderWidth: 1}}
               onChangeText={text => this.onChangeQuery(text)}
@@ -52,42 +51,10 @@ class App extends React.Component {
             />
             <Button title="Search" onPress={this.sendText} />
           </View>
-        </View>
+        </View> */}
       </ScrollView>
     );
   }
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
