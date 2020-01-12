@@ -1,11 +1,17 @@
 const rp = require('request-promise');
 const JSSoup = require('jssoup').default;
+const url = require("url");
 
 
-module.exports = async (name = 'world', context) => {
+/*
+ * @params {string} search What to search for
+ * @returns {string}
+ */
+
+module.exports = async (search = 'beavers', context) => {
 
   // Get the response to the request
-  let responce = await getResponse();
+  let responce = await getResponse(search);
   // For now, just return the response
   return responce;
 };
@@ -16,7 +22,7 @@ module.exports = async (name = 'world', context) => {
  */
 function getResponse(text) {
   // First, get bing :( response
-  let res = rp(`https://www.bing.com/search?q=beavers`).then((body) => {
+  let res = rp(`https://www.bing.com/search?q=${text}`).then((body) => {
     var soup = new JSSoup(body);
     // Get the regular responses
     var resultsHTML = soup.findAll('li', 'b_algo');
