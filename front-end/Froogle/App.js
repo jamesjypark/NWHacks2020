@@ -10,8 +10,8 @@ import {
   Button,
 } from 'react-native';
 
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
+import SearchScreen from './components/screens/SearchScreen';
+import LinkScreen from './components/screens/LinkScreen';
 import SmsListener from 'react-native-android-sms-listener';
 
 class App extends React.Component {
@@ -19,6 +19,7 @@ class App extends React.Component {
     super();
     this.state = {
       currQuery: '',
+      linkSelected: false,
     };
   }
 
@@ -38,20 +39,37 @@ class App extends React.Component {
   };
 
   render() {
-    const {results} = this.state;
+    // const { result, linkSelected } = this.state;
+    const linkSelected = true;
+    const results = [
+      {
+        type: 'card',
+        title: 'A very cool title',
+        desc: 'Cool titles are titles that are very cool',
+        url: 'link 1',
+      },
+      {
+        title: 'A not cool title',
+        desc: 'Cool titles are titles that are very cool',
+        url: 'link 2',
+      },
+      {
+        title: 'A somewhat cool title',
+        desc: 'Cool titles are titles that are very cool',
+        url: 'link 3',
+      },
+    ];
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        {results ? <Text>SearchScreen</Text> : <Text>MainScreen</Text>}
-        {/* <View>
-          <View>
-            <TextInput
-              style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-              onChangeText={text => this.onChangeQuery(text)}
-              value={query}
-            />
-            <Button title="Search" onPress={this.sendText} />
-          </View>
-        </View> */}
+        {results ? (
+          linkSelected ? (
+            <LinkScreen />
+          ) : (
+            <SearchScreen results={results} />
+          )
+        ) : (
+          <Text>MainScreen</Text>
+        )}
       </ScrollView>
     );
   }
