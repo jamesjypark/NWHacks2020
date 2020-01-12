@@ -1,4 +1,4 @@
-import {GREY_COLOR, TEAL_COLOR} from './hexcodes';
+import { GREY_COLOR, TEAL_COLOR } from './hexcodes';
 
 export const GLOBAL_STYLES = {
   title: {

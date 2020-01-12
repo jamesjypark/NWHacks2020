@@ -1,62 +1,86 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {
   View,
   StyleSheet,
   TextInput,
   Image,
-  TouchableOpacity,
+  TouchableNativeFeedback,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 import froogleLogo from '../../assets/froogleLogo.png';
 import searchIcon from '../../assets/searchIcon.png';
-import {TEAL_COLOR} from '../../constants/hexcodes';
+import { TEAL_COLOR } from '../../constants/hexcodes';
 
+/**
+ * Class that renders the searchbar used for
+ * submitting queries to the backend.
+ */
 class SearchBar extends React.Component {
   static propTypes = {
-    isLarge: PropTypes.bool,
     onChangeQuery: PropTypes.func.isRequired,
     submitQuery: PropTypes.func.isRequired,
+    goToMainScreen: PropTypes.func,
+    isLarge: PropTypes.bool,
   };
 
-  renderSearchBar = (onChangeQuery, submitQuery) => (
+  /**
+   * Method that renders a small searchbar with the application
+   * logo.
+   * 
+   * @param {function} onChangeQuery
+   * @param {function} submitQuery
+   * @param {function} goToMainScreen
+   * @returns {JSX.Element} Returns the searchbar UI.
+   */
+  renderSearchBar = (onChangeQuery, submitQuery, currQuery, goToMainScreen) => (
     <View style={styles.searchBar}>
-      <Image style={styles.searchBarLogo} source={froogleLogo} />
+      <TouchableNativeFeedback onPress={goToMainScreen}>
+        <Image style={styles.searchBarLogo} source={froogleLogo} />
+      </TouchableNativeFeedback>
       <TextInput
         style={styles.searchBarInput}
         onChangeText={onChangeQuery}
         onSubmitEditing={submitQuery}
+        defaultValue={currQuery}
       />
-      {/* TODO: Fix search button */}
-      <TouchableOpacity activeOpacity={0.5} onPress={this.test}>
+      <TouchableNativeFeedback onPress={submitQuery}>
         <Image style={styles.searchBarIcon} source={searchIcon} />
-      </TouchableOpacity>
+      </TouchableNativeFeedback>
     </View>
   );
 
-  renderLargeSearchBar = (onChangeQuery, submitQuery) => (
+  /**
+   * Method that renders a full-width searchbar 
+   * without the application logo.
+   * 
+   * @param {function} onChangeQuery
+   * @param {function} submitQuery
+   * @returns {JSX.Element} Returns the searchbar UI.
+   */
+  renderLargeSearchBar = (onChangeQuery, submitQuery, currQuery) => (
     <View style={styles.searchBar}>
       <TextInput
         style={[styles.searchBarInput, styles.searchBarInputLarge]}
         onChangeText={onChangeQuery}
         onSubmitEditing={submitQuery}
+        defaultValue={currQuery}
       />
-      {/* TODO: Fix search button */}
-      <TouchableOpacity activeOpacity={0.5} onPress={this.test}>
+      <TouchableNativeFeedback onPress={submitQuery}>
         <Image
           style={[styles.searchBarIcon, styles.searchBarIconLarge]}
           source={searchIcon}
         />
-      </TouchableOpacity>
+      </TouchableNativeFeedback>
     </View>
   );
 
   render() {
-    const {isLarge, onChangeQuery, submitQuery} = this.props;
+    const { isLarge, onChangeQuery, submitQuery, currQuery, goToMainScreen } = this.props;
 
     return isLarge
-      ? this.renderLargeSearchBar(onChangeQuery, submitQuery)
-      : this.renderSearchBar(onChangeQuery, submitQuery);
+      ? this.renderLargeSearchBar(onChangeQuery, submitQuery, currQuery)
+      : this.renderSearchBar(onChangeQuery, submitQuery, currQuery, goToMainScreen);
   }
 }
 

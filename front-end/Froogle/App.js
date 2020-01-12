@@ -1,18 +1,21 @@
 import React from 'react';
-import {ScrollView, Alert, NativeModules} from 'react-native';
+import { ScrollView, NativeModules } from 'react-native';
+import SmsListener from 'react-native-android-sms-listener';
 
 import SearchScreen from './components/screens/SearchScreen';
 import LinkScreen from './components/screens/LinkScreen';
-import SmsListener from 'react-native-android-sms-listener';
 import MainScreen from './components/screens/MainScreen';
-
 import parseSMS from './functions/parseSMS';
-
-const receiverNumber = '7786771604';
+import { END_OF_MESSAGE, API_PHONE_NUMBER, QUERY_TYPES } from './constants/constants';
 
 let isReceivingSMS = false;
 let currentBuildingSMS = '';
 
+/**
+ * Class that renders the main application, and
+ * handles routing between screens. Most querying
+ * logic is also handled by this class.
+ */
 class App extends React.Component {
   constructor() {
     super();
@@ -22,14 +25,21 @@ class App extends React.Component {
     };
   }
 
+  /**
+   * Method that checks for incoming SMS messages,
+   * and combines and parses them into a single
+   * string.
+   */
   componentDidMount() {
     SmsListener.addListener(message => {
+      console.log('message', message);
       if (isReceivingSMS) {
         currentBuildingSMS += message.body;
-        if (message.body.includes('END')) {
+        if (message.body.includes(END_OF_MESSAGE)) {
+          console.log('sms', currentBuildingSMS);
           this.setState({
-            results: parseSMS(currentBuildingSMS),
-          });
+            results: parseSMS(currentBuildingSMS).reverse(),
+          }, () => currentBuildingSMS = '');
           isReceivingSMS = false;
         }
       } else {
@@ -39,61 +49,63 @@ class App extends React.Component {
     });
   }
 
+  /**
+   * Method that sets the query from the user input field.
+   * 
+   * @param {String} query
+   */
+  onChangeQuery = query => this.setState({ currQuery: query });
+
+  /**
+   * Method that sends an SMS request to retrieve results 
+   * from the given URL.
+   * 
+   * @param {String} url
+   */
   onLinkPress = url => {
-    const queryObject = {
-      type: 'get',
+    this.setState({ linkSelected: true, });
+    this.sendText({
+      type: QUERY_TYPES.GET,
       url,
-    };
-    this.sendText(queryObject);
-    this.setState({
-      linkSelected: true,
     });
   };
 
+  /**
+   * Method that sends an SMS request to retrieve the results
+   * from the given search string.
+   */
   sendQuery = () => {
     this.setState({
       linkSelected: false,
       results: null,
     });
-    const queryObject = {
-      type: 'search',
+    this.sendText({
+      type: QUERY_TYPES.SEARCH,
       query: this.state.currQuery,
-    };
-    this.sendText(queryObject);
+    });
   };
 
-  sendText = queryObject => {
-    NativeModules.SendSMS.sendText(receiverNumber, JSON.stringify(queryObject));
-  };
+  /**
+   * Method that sends a text message to the API.
+   * 
+   * @param {Object} queryObject
+   */
+  sendText = queryObject => (
+    NativeModules.SendSMS.sendText(API_PHONE_NUMBER, JSON.stringify(queryObject))
+  );
 
-  onChangeQuery = query => {
-    this.setState({currQuery: query});
-  };
+  /**
+   * Method that results state variables to their defaults
+   * to redirect the user back to the main screen.
+   */
+  goToMainScreen = () => this.setState({
+    results: undefined,
+    linkSelected: false,
+    currQuery: ''
+  });
 
   render() {
-    const {results, linkSelected} = this.state;
-    // const linkSelected = false;
-    // const results = [
-    //   {
-    //     type: 'card',
-    //     title: 'A very cool title',
-    //     desc:
-    //       'Cool titles are titles that are very cool but is often considered cooler than normal titles',
-    //     url: 'link 1',
-    //   },
-    //   {
-    //     title: 'A not cool title',
-    //     desc:
-    //       'Cool titles are titles that are very cool and I am very tired but this is fun so it is ok',
-    //     url: 'link 2',
-    //   },
-    //   {
-    //     title: 'A somewhat cool title',
-    //     desc:
-    //       'Cool titles are titles that are very cool but is it really worth having this much fun to build?',
-    //     url: 'link 3',
-    //   },
-    // ];
+    const { results, linkSelected, currQuery } = this.state;
 
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
@@ -103,21 +115,25 @@ class App extends React.Component {
               results={results}
               onChangeQuery={this.onChangeQuery}
               submitQuery={this.sendQuery}
+              goToMainScreen={this.goToMainScreen}
+              currQuery={currQuery}
             />
           ) : (
-            <SearchScreen
-              results={results}
+              <SearchScreen
+                results={results}
+                onChangeQuery={this.onChangeQuery}
+                submitQuery={this.sendQuery}
+                onLinkPress={this.onLinkPress}
+                goToMainScreen={this.goToMainScreen}
+                currQuery={currQuery}
+              />
+            )
+        ) : (
+            <MainScreen
               onChangeQuery={this.onChangeQuery}
               submitQuery={this.sendQuery}
-              onLinkPress={this.onLinkPress}
             />
-          )
-        ) : (
-          <MainScreen
-            onChangeQuery={this.onChangeQuery}
-            submitQuery={this.sendQuery}
-          />
-        )}
+          )}
       </ScrollView>
     );
   }

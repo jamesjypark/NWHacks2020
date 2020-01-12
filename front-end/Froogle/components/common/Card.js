@@ -1,27 +1,34 @@
 import React from 'react';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
+import he from 'he';
 
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import { GLOBAL_STYLES } from '../../constants/globalStyles';
 
-import {GLOBAL_STYLES} from '../../constants/globalStyles';
-
+/**
+ * Class that renders the main answer card.
+ */
 class Card extends React.Component {
+  static propTypes = {
+    desc: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+  }
+
   render() {
-    const {desc, url} = this.props;
+    const { desc, url } = this.props;
+
     return (
       <TouchableOpacity
-        onPress={() => {
-          this.props.onPress(url);
-        }}
-        style={styles.card}>
-        <Text style={{...styles.cardText, ...GLOBAL_STYLES.bodyText1}}>
-          {desc}
+        onPress={() => this.props.onPress(url)}
+        style={styles.card}
+      >
+        <Text style={[styles.cardText, GLOBAL_STYLES.bodyText1]}>
+          {he.decode(desc)}
         </Text>
       </TouchableOpacity>
     );
   }
 }
-
-export default Card;
 
 const styles = StyleSheet.create({
   card: {
@@ -38,3 +45,5 @@ const styles = StyleSheet.create({
     padding: 15,
   },
 });
+
+export default Card;
