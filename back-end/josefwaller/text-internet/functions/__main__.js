@@ -3,17 +3,21 @@ const JSSoup = require('jssoup').default;
 const url = require("url");
 
 
-/*
- * @params {string} search What to search for
- * @returns {string}
+/**
+ * @returns {object.http} xml The XML
  */
-
 module.exports = async (search = 'https://www.encyclopedia.com/history/modern-europe/german-history/holy-roman-empire', context) => {
 
   // Get the response to the request
-  let responce = await getWebpage(search);
-  // For now, just return the response
-  return responce;
+  let res = await getWebpage(search);
+  // For now, just return the response as XML
+  return {
+    body: `<?xml version="1.0" encoding="UTF-8"?><Response><Message><Body>${res}</Body></Message></Response>`,
+    headers: {
+      'Content-Type': "application/xml"
+    },
+    statusCode: 200
+  };
 };
 
 /*
