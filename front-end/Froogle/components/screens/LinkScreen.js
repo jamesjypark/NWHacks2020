@@ -10,13 +10,16 @@ import {GLOBAL_STYLES} from '../../constants/globalStyles';
 class LinkScreen extends React.Component {
   render() {
     const {results} = this.props;
+    const {onChangeQuery, submitQuery} = this.props;
     return (
       <StyleView>
-        <SearchBar />
+        <SearchBar onChangeQuery={onChangeQuery} submitQuery={submitQuery} />
         <View style={styles.card}>
           <View style={styles.cardText}>
             <Text style={GLOBAL_STYLES.subheader1}>here's the result</Text>
-            <Text style={GLOBAL_STYLES.bodyText1}>{results[0].desc}</Text>
+            <Text style={GLOBAL_STYLES.bodyText1}>
+              {results.length > 0 ? results[0].desc : 'loading'}
+            </Text>
           </View>
         </View>
       </StyleView>

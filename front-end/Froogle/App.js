@@ -45,10 +45,16 @@ class App extends React.Component {
       url,
     };
     this.sendText(queryObject);
-    Alert.alert('clicked ' + url);
+    this.setState({
+      linkSelected: true,
+    });
   };
 
   sendQuery = () => {
+    this.setState({
+      linkSelected: false,
+      results: null,
+    });
     const queryObject = {
       type: 'search',
       query: this.state.currQuery,
@@ -91,9 +97,13 @@ class App extends React.Component {
 
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        {results ? (
-          linkSelected ? (
-            <LinkScreen results={results} />
+        {results || results === null ? (
+          linkSelected || linkSelected === null ? (
+            <LinkScreen
+              results={results}
+              onChangeQuery={this.onChangeQuery}
+              submitQuery={this.sendQuery}
+            />
           ) : (
             <SearchScreen
               results={results}
