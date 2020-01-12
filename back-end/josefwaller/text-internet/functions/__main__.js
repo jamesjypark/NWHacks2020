@@ -104,11 +104,12 @@ function getWebpage(urlStr) {
     return { desc: getWikipedia(urlStr) };
   } else {
     // Get the contents
+    const LIMIT = 600;
     let res = rp(urlStr).then(body => {
       var soup = new JSSoup(body);
       // Store every p tag which has at least 200 words in it
       let contents = soup.findAll("p").filter(e => e.text.length > 200).map(e => e.text).join(". ");
-      return { desc: contents.substring(0, 147) + "..." };
+      return { desc: contents.substring(0, LIMIT - 3) + "..." };
     });
     return res;
   }
