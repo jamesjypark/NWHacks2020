@@ -5,11 +5,18 @@ const xml = require("xml");
 
 module.exports = async (name = 'world', context) => {
 
-  let x = await fetchPage();
-  return x;
+  // Get the response to the request
+  let x = await getResponse();
+  // For now, just return the response
+  return result;
 };
 
-function fetchPage() {
+/*
+ * Gets the response of a text given by the user
+ * Returns a json response
+ */
+function getResponse(text) {
+  // First,
   let x = rp('https://en.wikipedia.org/w/api.php?action=query&explaintext=1&prop=extracts&titles=fried_chicken&format=json').then((body) => {
     console.log("Responce received");
     // Get the body of the wikipedia article
