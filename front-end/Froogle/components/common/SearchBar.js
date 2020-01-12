@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { View, StyleSheet, TextInput, Image, TouchableOpacity } from 'react-native';
 
 import searchIcon from '../../assets/searchIcon.png';
-import { BLUE_COLOR } from '../../constants/hexcodes';
+import { TEAL_COLOR } from '../../constants/hexcodes';
 
 class SearchBar extends React.Component {
 
   static propTypes = {
-    isLarge: PropTypes.bool.isRequired,
+    isLarge: PropTypes.bool,
     onChangeQuery: PropTypes.func.isRequired,
     submitQuery: PropTypes.func.isRequired,
   }
@@ -17,7 +17,7 @@ class SearchBar extends React.Component {
     const { isLarge, onChangeQuery, submitQuery } = this.props;
     const textInputStyles = isLarge
       ? [styles.searchBarInput, styles.searchBarInputLarge]
-      : styles.searchBarInputLarge;
+      : styles.searchBarInput;
 
     return (
       <View style={styles.searchBar}>
@@ -37,11 +37,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 10
   },
   searchBarInput: {
+    width: "100%",
     height: 40,
     paddingLeft: 15,
     paddingRight: 45,
     borderWidth: 2,
-    borderColor: BLUE_COLOR,
+    borderColor: TEAL_COLOR,
     borderRadius: 100
   },
   searchBarInputLarge: {

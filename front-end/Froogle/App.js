@@ -66,7 +66,7 @@ class App extends React.Component {
           linkSelected ? (
             <LinkScreen results={results} />
           ) : (
-            <SearchScreen results={results} />
+            <SearchScreen results={results} onChangeQuery={this.onChangeQuery} submitQuery={this.sendText} />
           )
         ) : (
           <MainScreen onChangeQuery={this.onChangeQuery} submitQuery={this.sendText} />

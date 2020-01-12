@@ -1,13 +1,13 @@
 import React from 'react';
 
-import {StyleSheet, Text, View, Alert} from 'react-native';
+import { StyleSheet, Text, View, Alert } from 'react-native';
 
 import SearchBar from '../common/SearchBar';
 import StyleView from '../common/StyleView';
 import Card from '../common/Card';
 import Link from '../common/Link';
 
-import {GLOBAL_STYLES} from '../../constants/globalStyles';
+import { GLOBAL_STYLES } from '../../constants/globalStyles';
 
 class SearchScreen extends React.Component {
   onPress = url => {
@@ -20,10 +20,11 @@ class SearchScreen extends React.Component {
   };
   render() {
     // const {results} = this.props;
+    const { onChangeQuery, submitQuery } = this.props;
     const results = [];
     return (
       <StyleView>
-        <SearchBar />
+        <SearchBar onChangeQuery={onChangeQuery} submitQuery={submitQuery} />
         {results.length === 0 ? (
           <View style={styles.noResultContainer}>
             <Text style={GLOBAL_STYLES.header}>hmmm...</Text>
@@ -32,20 +33,20 @@ class SearchScreen extends React.Component {
             </Text>
           </View>
         ) : (
-          results.map(element => {
-            if (element.type === 'card') {
-              return (
-                <View>
-                  <Text style={GLOBAL_STYLES.headerLeft}>here you go</Text>
-                  <Card {...element} onPress={this.onPress} />
-                  <Text style={GLOBAL_STYLES.subheader1}>more results</Text>
-                </View>
-              );
-            } else {
-              return <Link {...element} onPress={this.onPress} />;
-            }
-          })
-        )}
+            results.map(element => {
+              if (element.type === 'card') {
+                return (
+                  <View>
+                    <Text style={GLOBAL_STYLES.headerLeft}>here you go</Text>
+                    <Card {...element} onPress={this.onPress} />
+                    <Text style={GLOBAL_STYLES.subheader1}>more results</Text>
+                  </View>
+                );
+              } else {
+                return <Link {...element} onPress={this.onPress} />;
+              }
+            })
+          )}
       </StyleView>
     );
   }
