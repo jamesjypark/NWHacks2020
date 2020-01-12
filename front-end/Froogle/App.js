@@ -9,10 +9,10 @@ import {
   TextInput,
   Button,
 } from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
-
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import SmsListener from 'react-native-android-sms-listener';
+
+import MainScreen from './components/screens/MainScreen';
 
 class App extends React.Component {
   constructor() {
@@ -23,7 +23,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('component mounted');
     SmsListener.addListener(message => {
       Alert.alert(message.body);
     });
@@ -34,14 +33,17 @@ class App extends React.Component {
   };
 
   onChangeQuery = query => {
-    this.setState({currQuery: query});
+    this.setState({ currQuery: query });
   };
 
   render() {
-    const {results} = this.state;
+    const { results } = this.state;
     return (
       <ScrollView contentInsetAdjustmentBehavior="automatic">
-        {results ? <Text>SearchScreen</Text> : <Text>MainScreen</Text>}
+        {results 
+          ? <Text>SearchScreen</Text> 
+          : <MainScreen onChangeQuery={this.onChangeQuery} />
+        }
         {/* <View>
           <View>
             <TextInput
