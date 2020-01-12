@@ -8,10 +8,10 @@ const url = require("url");
  * @returns {string}
  */
 
-module.exports = async (search = 'Beavers', context) => {
+module.exports = async (search = 'https://www.encyclopedia.com/history/modern-europe/german-history/holy-roman-empire', context) => {
 
   // Get the response to the request
-  let responce = await getWikipedia(search);
+  let responce = await getWebpage(search);
   // For now, just return the response
   return responce;
 };
@@ -44,6 +44,23 @@ function getResponse(text) {
     return results;
   });
   return res;
+}
+/*
+ * Return a webpage's text result as an array
+ */
+function getWebpage(urlStr) {
+  if (urlStr.match(/en\.wikipedia\.com/)) {
+    return [ getWikipedia(urlStr) ];
+  } else {
+    // Get the contents
+    let res = rp(urlStr).then(body => {
+      var soup = new JSSoup(body);
+      // Store every p tag which has at least 200 words in it
+      let contents = soup.findAll("p").filter(e => e.text.length > 200).map(e => e.text).join(". ");
+      return [ contents.substring(0, 147) + "..." ];
+    });
+    return res;
+  }
 }
 /*
  * Given a wikipedia url, fetches the first bit of the summary
