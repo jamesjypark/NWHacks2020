@@ -9,7 +9,7 @@ const matchAll = require("match-all");
  * @param {string} Body The body of the message
  * @returns {object.http} xml The XML
  */
-module.exports = async (Body= '' , context) => {
+module.exports = async (Body= '{ "type" : "search" , "query" : "whats the weather" }' , context) => {
   
 
   // Get the response to the request
@@ -59,20 +59,38 @@ function getSearchResponse(text) {
     var soup = new JSSoup(body);
     // Get the regular responses
     var resultsHTML = soup.findAll('li', 'b_algo');
-    let results = resultsHTML.slice(0, 4).map(e => ({
-      title: e.find("h2").text,
-      url: e.find("h2").find("a").attrs["href"],
-      desc: e.find('p') ? e.find("p").text : e.find("span").text
-    }));
+    let results = resultsHTML.slice(0, 4).map(e => {
+      let titleHtml = e.find("h2");
+      if (titleHtml) {
+        let urlHtml = titleHtml.find("a");
+        let descHtml = e.find("p") ? e.find("p") : e.find("span");
+        if (urlHtml && descHtml) {
+          return {
+            title: titleHtml.text,
+            url: urlHtml.attrs["href"],
+            desc: descHtml.text
+          }
+        } else {
+          return null
+        }
+      }
+    }).filter(e => e != null);
     // Get the card, if there is one
-    let x = soup.find("div", "b_subModule");
+    let x = soup.find("li", "b_ans");
+    const DESC_SIZE = 100;
     if (x) {
-      results = results.concat({
-        type: "card",
-        desc: x.find("span").text,
-        url: x.find("a").attrs["href"],
-        title: x.find("h2").text
-      });
+      // Ensure the card has the right things in it
+      let descHtml = x.find("span");
+      let urlHtml = x.find("a");
+      let titleHtml = x.find("div", "b_clearfix") || x.find("h2"); 
+      if (descHtml && urlHtml && titleHtml) {
+        results = results.concat({
+          type: "card",
+          desc: descHtml.text.substring(0, DESC_SIZE - 3) + "...",
+          url: urlHtml.attrs["href"],
+          title: titleHtml.text
+        });
+      }
     }
     return results;
   });
