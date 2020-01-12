@@ -3,11 +3,11 @@ import React from 'react';
 import {Text, View} from 'react-native';
 
 class LinkScreen extends React.Component {
-  state = {};
   render() {
+    const {results} = this.props;
     return (
       <View>
-        <Text>Link</Text>
+        <Text>{results[0].desc}</Text>
       </View>
     );
   }

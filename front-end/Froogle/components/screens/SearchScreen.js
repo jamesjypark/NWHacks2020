@@ -9,7 +9,7 @@ class SearchScreen extends React.Component {
   onPress = url => {
     const queryObject = {
       url: url,
-      type: 'search',
+      type: 'get',
     };
     // text query object to server
     Alert.alert('going to ' + url);
@@ -20,7 +20,10 @@ class SearchScreen extends React.Component {
       <View>
         <Text>Search bar</Text>
         {results.length === 0 ? (
-          <Text>no search result</Text>
+          <View>
+            <Text>hmmm...</Text>
+            <Text>sorry, we couldn't find any results for that query</Text>
+          </View>
         ) : (
           results.map(element => {
             if (element.type === 'card') {

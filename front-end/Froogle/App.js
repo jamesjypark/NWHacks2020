@@ -40,7 +40,7 @@ class App extends React.Component {
 
   render() {
     // const { result, linkSelected } = this.state;
-    const linkSelected = true;
+    const linkSelected = false;
     const results = [
       {
         type: 'card',
@@ -63,7 +63,7 @@ class App extends React.Component {
       <ScrollView contentInsetAdjustmentBehavior="automatic">
         {results ? (
           linkSelected ? (
-            <LinkScreen />
+            <LinkScreen results={results} />
           ) : (
             <SearchScreen results={results} />
           )
