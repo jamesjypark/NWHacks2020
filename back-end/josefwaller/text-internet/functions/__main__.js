@@ -9,7 +9,7 @@ const matchAll = require("match-all");
  * @param {string} Body The body of the message
  * @returns {object.http} xml The XML
  */
-module.exports = async (Body= '{ "type" : "search" , "query" : "Beaver" }' , context) => {
+module.exports = async (Body= '{ "type" : "search" , "query" : "Beavers" }' , context) => {
   
 
   // Get the response to the request
@@ -80,7 +80,7 @@ function getSearchResponse(text) {
     if (x) {
       // Ensure the card has the right things in it
       let descHtml = x.find("div", "b_snippet")
-      let urlHtml = x.find("a");
+      let urlHtml = x.find("div", "infoCardIcons") ? x.find("div", "infoCardIcons").find("a") : null;
       let titleHtml = x.find("div", "b_clearfix") || x.find("h2"); 
       const CARD_DESC_SIZE = 300;
       if (descHtml && urlHtml && titleHtml) {
