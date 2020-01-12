@@ -8,10 +8,10 @@ const url = require("url");
  * @returns {string}
  */
 
-module.exports = async (search = 'beavers', context) => {
+module.exports = async (search = 'Beavers', context) => {
 
   // Get the response to the request
-  let responce = await getResponse(search);
+  let responce = await getWikipedia(search);
   // For now, just return the response
   return responce;
 };
@@ -45,19 +45,22 @@ function getResponse(text) {
   });
   return res;
 }
-
+/*
+ * Given a wikipedia url, fetches the first bit of the summary
+ */
 function getWikipedia(url) {
-  let x = rp('https://en.wikipedia.org/w/api.php?action=query&explaintext=1&prop=extracts&titles=fried_chicken&format=json').then((body) => {
+  // First change the URL from a regular wikipedia one to a wikipedia api url
+  let apiUrl = `https://en.wikipedia.org/w/api.php?format=json&action=query&prop=extracts&exintro&explaintext&redirects=1&titles=${url.split("/").splice(-1).pop()}`;
+  let x = rp(apiUrl).then((body) => {
     console.log("Responce received");
     // Get the body of the wikipedia article
-    let content = JSON.parse(body)["query"]["pages"]["18598020"]["extract"];
-    // Get the first 3 sentances
-    let sentances = content.split('.').splice(0, 2).join('.');
-    // Return something in XML
-    let response = `<?xml version="1.0" encoding="UTF-8"?><Response><Body>${sentances}<Body></Response>`;
-    return response;
+    let contentHtml = JSON.parse(body)["query"]["pages"];
+    contentHtml = contentHtml[Object.keys(contentHtml)[0]]["extract"];
+    // Limit to 150 characters
+    const LIMIT = 150;
+    let content = contentHtml.substring(0, LIMIT - 3) + "...";
+    // Return the trimmed content
+    return content;
   });
   return x;
-
-
 }
