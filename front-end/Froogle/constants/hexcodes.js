@@ -1,0 +1,1 @@
+export const GREY_COLOR = '#707070';

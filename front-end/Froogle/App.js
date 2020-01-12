@@ -14,6 +14,8 @@ import SearchScreen from './components/screens/SearchScreen';
 import LinkScreen from './components/screens/LinkScreen';
 import SmsListener from 'react-native-android-sms-listener';
 
+import MainScreen from './components/screens/MainScreen';
+
 class App extends React.Component {
   constructor() {
     super();
@@ -24,7 +26,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    console.log('component mounted');
     SmsListener.addListener(message => {
       Alert.alert(message.body);
     });
@@ -35,7 +36,7 @@ class App extends React.Component {
   };
 
   onChangeQuery = query => {
-    this.setState({currQuery: query});
+    this.setState({ currQuery: query });
   };
 
   render() {
