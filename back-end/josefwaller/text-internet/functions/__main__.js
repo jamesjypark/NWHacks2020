@@ -1,19 +1,23 @@
 const rp = require('request-promise');
 const JSSoup = require('jssoup').default;
 const url = require("url");
+const he = require("he");
 
 
 /**
  * @param {string} Body The body of the message
  * @returns {object.http} xml The XML
  */
-module.exports = async (Body="Wrong answer", context) => {
+module.exports = async (Body= '{ "type" : "search" , "query" : "What is a house?" }' , context) => {
+  
 
   // Get the response to the request
-  let res = await getWebpage("https://en.wikipedia.org/wiki/Open_specifications");
+ //let res = await getWebpage("https://en.wikipedia.org/wiki/Open_specifications");
   // For now, just return the response as XML
+  const result = await checkResponse(JSON.parse(Body));
   return {
-    body: `<?xml version="1.0" encoding="UTF-8"?><Response><Message><Body>${Body}</Body></Message></Response>`,
+    body: `<?xml version="1.0" encoding="UTF-8"?><Response><Message><Body>${he.encode(JSON.stringify(
+	result).replace("&nbsp;", ""))}</Body></Message></Response>`,
     headers: {
       'Content-Type': "application/xml"
     },
@@ -21,11 +25,28 @@ module.exports = async (Body="Wrong answer", context) => {
   };
 };
 
+
+async function checkResponse(text){
+  
+  if(text.type === "search"){
+    //  const responseValue = await getSearchResponse(text.query);   
+    //  return JSON.stringify(responseValue);
+     return await getSearchResponse(text.query); 
+    }
+
+    if(text.type === "get") {
+     // const responseValue = await getWebpage(text.url);  
+    // return JSON.stringify(responseValue);
+     return await getWebpage(text.url);
+    }
+
+}
+
 /*
  * Gets the response of a text given by the user
  * Returns a json response
  */
-function getResponse(text) {
+function getSearchResponse(text) {
   // First, get bing :( response
   let res = rp(`https://www.bing.com/search?q=${text}`).then((body) => {
     var soup = new JSSoup(body);
