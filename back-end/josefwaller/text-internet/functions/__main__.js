@@ -4,15 +4,16 @@ const url = require("url");
 
 
 /**
+ * @param {string} Body The body of the message
  * @returns {object.http} xml The XML
  */
-module.exports = async (search = 'https://www.encyclopedia.com/history/modern-europe/german-history/holy-roman-empire', context) => {
+module.exports = async (Body="Wrong answer", context) => {
 
   // Get the response to the request
-  let res = await getWebpage(search);
+  let res = await getWebpage("https://en.wikipedia.org/wiki/Open_specifications");
   // For now, just return the response as XML
   return {
-    body: `<?xml version="1.0" encoding="UTF-8"?><Response><Message><Body>${res}</Body></Message></Response>`,
+    body: `<?xml version="1.0" encoding="UTF-8"?><Response><Message><Body>${Body}</Body></Message></Response>`,
     headers: {
       'Content-Type': "application/xml"
     },
