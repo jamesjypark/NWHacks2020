@@ -18,8 +18,9 @@ module.exports = async (Body= '' , context) => {
   const result = await checkResponse(JSON.parse(Body));
   let contents = JSON.stringify(result).replace("&nbsp;", "") + " END";
   let xml = "";
-  for (let i = 0; i < contents.length / 1000 + 1; i++) {
-    xml += `<Message><Body>${contents.slice(1000 * i, (i + 1) * 1000)}</Body></Message>`;
+  const SIZE = 600;
+  for (let i = 0; i < contents.length / SIZE; i++) {
+    xml += `<Message><Body>${contents.slice(SIZE * i, (i + 1) * SIZE)}</Body></Message>`;
   }
   console.log(xml);
   return {
@@ -58,7 +59,7 @@ function getSearchResponse(text) {
     var soup = new JSSoup(body);
     // Get the regular responses
     var resultsHTML = soup.findAll('li', 'b_algo');
-    let results = resultsHTML.map(e => ({
+    let results = resultsHTML.slice(0, 4).map(e => ({
       title: e.find("h2").text,
       url: e.find("h2").find("a").attrs["href"],
       desc: e.find('p') ? e.find("p").text : e.find("span").text
@@ -82,14 +83,14 @@ function getSearchResponse(text) {
  */
 function getWebpage(urlStr) {
   if (urlStr.match(/en\.wikipedia\.com/)) {
-    return [ getWikipedia(urlStr) ];
+    return { desc: getWikipedia(urlStr) };
   } else {
     // Get the contents
     let res = rp(urlStr).then(body => {
       var soup = new JSSoup(body);
       // Store every p tag which has at least 200 words in it
       let contents = soup.findAll("p").filter(e => e.text.length > 200).map(e => e.text).join(". ");
-      return [ contents.substring(0, 147) + "..." ];
+      return { desc: contents.substring(0, 147) + "..." };
     });
     return res;
   }
