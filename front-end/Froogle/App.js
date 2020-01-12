@@ -7,25 +7,35 @@
  */
 
 import React from 'react';
-import {StyleSheet, ScrollView, View, Text} from 'react-native';
+import {StyleSheet, ScrollView, View, Text, Alert} from 'react-native';
 
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-const App: () => React$Node = () => {
-  return (
-    <>
+import Communications from 'react-native-communications';
+
+class App extends React.Component {
+  sendText = () => {
+    Alert.alert('hello');
+    Communications.text('7783508649', 'hello');
+  };
+  render() {
+    return (
       <ScrollView
         contentInsetAdjustmentBehavior="automatic"
         style={styles.scrollView}>
         <View style={styles.body}>
           <View style={styles.sectionContainer}>
-            <Text style={styles.sectionTitle}>Hello Nilay</Text>
+            <Text style={styles.sectionTitle} onPress={this.sendText}>
+              Hello Nilay
+            </Text>
           </View>
         </View>
       </ScrollView>
-    </>
-  );
-};
+    );
+  }
+}
+
+export default App;
 
 const styles = StyleSheet.create({
   body: {
@@ -58,5 +68,3 @@ const styles = StyleSheet.create({
     textAlign: 'right',
   },
 });
-
-export default App;
